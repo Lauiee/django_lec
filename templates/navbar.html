@@ -1,0 +1,49 @@
+<!-- Responsive navbar-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-5">
+        <a class="navbar-brand mr-5" href="/mysite">
+            <img src="https://tigers.co.kr/img/sub/emblem01_01.png" alt="KIA TIGERS 로고"
+                 style="max-width: 90px; height: auto;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto mb-2 mb-lg-0" style="font-size: 21px;">
+                <li class="nav-item dropdown">
+                    <a class="nav-link fw-bold dropdown-toggle" href="/team/hello" id="navbarDropdown1" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                       style="margin-right: 100px; color: black;">
+                        팀 소개
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/team/hello">인사말</a>
+                        <a class="dropdown-item" href="/team/introduction">구단 소개</a>
+                        <a class="dropdown-item" href="/team/stadium">경기장 소개</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link fw-bold dropdown-toggle" href="/player/scout" id="navbarDropdown2" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                       style="margin-right: 100px; color: black;">
+                        선수단 소개
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/player/scout">신규 영입 선수</a>
+                        <a class="dropdown-item" href="/player/pitcher">투수</a>
+                        <a class="dropdown-item" href="/player/batter">타자</a>
+                        <a class="dropdown-item" href="/player/coach">코칭 스태프</a>
+                    </div>
+                </li>
+                <li class="nav-item"><a class="nav-link fw-bold" href="/schedule_result"
+                                        style="color: black;">경기일정/결과</a></li>
+                {% if user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:logout' %}">{{ user.username }} (logout)</a></li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

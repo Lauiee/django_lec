@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+
+        <!-- Page Content-->
+        <style>
+    /* 컨테이너 사이에 선 추가 */
+    .container-divider {
+        border-bottom: 2px solid #ccc; /* 선의 스타일을 지정합니다. */
+        margin-bottom: 15px; /* 아래로 여백을 줍니다. */
+        margin-top: 15px; /* 위로 여백을 줍니다. */
+    }
+        </style>
+        <div class="container px-4 px-lg-5">
+             <!-- Heading Row--><!-- Team Logo -->
+            <div>
+                <img src="https://tigers.co.kr/img/sub/intro2_vs.png" alt="KIA TIGERS" class="img-fluid">
+
+            </div>
+            <!-- Heading Row--><!-- Team info -->
+            <div class="container-divider"></div>
+            <div class="row gx-4 gx-lg-5 align-items-center my-5 ">
+                <div class="col-lg-3"><img class="img-fluid rounded mb-4 mb-lg-0" src="https://tigers.co.kr/img/sub/intro2_dt01.png" alt="..." /></div>
+                <div class="col-lg-9">
+                    {% if team_history %}
+                         {% with first_history=team_history.0 %}
+                   <h1 class="font-weight-bold" style="font-size: 30px;">{{ first_history.subtitle }}</h1>
+            <p style="font-size: 13.3px;">{{ first_history.content| linebreaksbr }}</p>
+                        {% endwith %}
+                        {% else %}
+                        <p>history 가 없습니다.</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="container-divider"></div>
+            <div class="row gx-4 gx-lg-5 align-items-center my-5">
+                <div class="col-lg-3"><img class="img-fluid rounded mb-4 mb-lg-0" src="https://tigers.co.kr/img/sub/intro2_dt02.png" alt="..." /></div>
+                <div class="col-lg-9">
+                    {% if team_history %}
+                         {% with second_history=team_history.1 %}
+                   <h1 class="font-weight-bold" style="font-size: 30px;">{{ second_history.subtitle }}</h1>
+            <p style="font-size: 13.3px;">{{ second_history.content|linebreaksbr  }}</p>
+                        {% endwith %}
+                        {% else %}
+                        <p>history 가 없습니다.</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="container-divider"></div>
+            <!-- Call to Action-->
+
+            <!-- Content Row-->
+        </div>
+      {% endblock %}

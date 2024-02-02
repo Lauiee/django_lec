@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<!-- Page Content-->
+<style>
+    /* 컨테이너 사이에 선 추가 */
+    .container-divider {
+        border-bottom: 2px solid #ccc; /* 선의 스타일을 지정합니다. */
+        margin-bottom: 15px; /* 아래로 여백을 줍니다. */
+        margin-top: 15px; /* 위로 여백을 줍니다. */
+    }
+    /* 이미지 및 글자 겹치기 */
+    .image-container {
+        position: relative;
+    }
+
+    .overlap-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 1;
+    }
+    .text-over-image {
+        position: absolute;
+        top: 50%; /* 세로 중앙 정렬 */
+        left: 50%; /* 가로 중앙 정렬 */
+        transform: translate(-50%, -50%); /* 정렬 보정 */
+        color: black; /* 텍스트 색상 설정 */
+        font-size: 70px; /* 텍스트 크기 설정 */
+        font-weight: bold; /* 텍스트 두껍게 설정 */
+    }
+</style>
+<div class="container px-4 px-lg-5">
+    <!-- Heading Row--><!-- Team Logo -->
+    <div class="image-container">
+        <!-- <img src="{% static 'images/team_info_hello/helloHeaderTiger.png' %}" alt="..." class="overlap-image" style="width: 300px; height: 200px; margin-left: 54px; margin-bottom: 10px; margin-top: 10px;">-->
+        <div class="text-over-image">신규 영입 선수</div>
+        <img src="{% static 'images/team_info_hello/helloKIA.png' %}" alt="내 이미지" style="width: 1044px; height: 220px;">
+    </div>
+    <!-- Heading Row--><!-- Team info -->
+    <div class="container-divider"></div>
+    <div class="row gx-4 gx-lg-5 align-items-center my-5">
+        <div class="col-lg-16">
+            {% if player_instance %}
+            {% for player in player_instance %}
+            <div class="player-info" style="display: inline-block; margin-right: 17px; text-align : center;">
+                <h1 class="font-weight-bold" style="font-size: 30px;">
+                    {% if player.PlayerImg %}
+                    <a href="{% url 'detail' player_id=player.id %}">
+                        <img src="{{ player.PlayerImg.url }}" alt="{{ player.playerName }} 이미지">
+                    </a>
+                    {% endif %}
+                </h1>
+
+                <p style="font-size: 13.3px;">
+                    <a href="{% url 'detail' player_id=player.id %}">
+                        No.{{ player.playerBackNum }} {{ player.playerName }}
+                        <br>{{ player.playerPos|linebreaksbr }}
+                    </a>
+
+                </p>
+            </div>
+
+            {% if forloop.counter|divisibleby:4 and not forloop.last %}
+        </div>
+        <div class="col-lg-9">
+            {% endif %}
+            {% endfor %}
+            {% else %}
+            <p>player가 없습니다.</p>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="container-divider"></div>
+
+    <!-- Call to Action-->
+
+    <!-- Content Row-->
+</div>
+{% endblock %}
