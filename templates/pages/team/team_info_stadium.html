@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- Page Content-->
+<style>
+    /* 컨테이너 사이에 선 추가 */
+    .container-divider {
+        border-bottom: 2px solid #ccc; /* 선의 스타일을 지정합니다. */
+        margin-bottom: 15px; /* 아래로 여백을 줍니다. */
+        margin-top: 15px; /* 위로 여백을 줍니다. */
+    }
+    /* 이미지 및 글자 겹치기 */
+    .image-container {
+        position: relative;
+    }
+
+    .overlap-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 1;
+    }
+    .text-over-image {
+        position: absolute;
+        top: 50%; /* 세로 중앙 정렬 */
+        left: 35%; /* 가로 중앙 정렬 */
+        transform: translate(-50%, -50%); /* 정렬 보정 */
+        color: black; /* 텍스트 색상 설정 */
+        font-size: 100px; /* 텍스트 크기 설정 */
+        font-weight: bold; /* 텍스트 두껍게 설정 */
+    .property-label {
+        display: inline-block;
+        width: 78px; /* 원하는 레이블의 너비로 조절 */
+        margin-right: 10px; /* 레이블 사이의 간격 조절 */
+        font-weight: bold;
+    }
+    }
+</style>
+<div class="container px-4 px-lg-5">
+    <!-- Heading Row--><!-- Team Logo -->
+    <!-- Heading Row--><!-- Team info -->
+    <div class="container-divider"></div>
+    <div class="row gx-4 gx-lg-5 align-items-center my-5 ">
+        <div class="col-lg-9">
+
+            <div class="text-over-image" style="color: white;">
+                {% if stadium %}
+                {% with stadium=stadium.0 %}
+                <h1 class="font-weight-bold" style="font-size: 30px;">{{ stadium.stadiumIntroTitle }}</h1>
+                <p style="font-size: 13.5px;">{{ stadium.stadiumIntroContent| linebreaksbr }}</p>
+                <div style="border-bottom: 3px solid red; width: 83%; margin-bottom: 15px; margin-top: 15px;"></div>
+                <p style="font-size: 13.5px;"><span class="property-label">구장명</span> | {{ stadium.stadiumName }}</p>
+                <p style="font-size: 13.5px;"><span class="property-label">주소</span> | {{ stadium.stadiumAdd }}</p>
+                <p style="font-size: 13.5px;"><span class="property-label">좌석수</span> | {{ stadium.stadiumSeat }}</p>
+                <p style="font-size: 13.5px;"><span class="property-label">총면적</span> | {{ stadium.stadiumSize }}</p>
+                <p style="font-size: 13.5px;"><span class="property-label">규모</span> | {{ stadium.stadiumScale}}</p>
+                <p style="font-size: 13.5px;"><span class="property-label">펜스</span> | {{ stadium.stadiumFence}}</p>
+                <p style="font-size: 13.5px;"><span class="property-label">특징</span> | {{ stadium.stadiumPoint}}</p>
+                <p style="font-size: 13.5px;"><span class="property-label">KIA타이거즈 사무실</span> | {{ stadium.stadiumOfficeAdd}}</p>
+                {% endwith %}
+                {% else %}
+                <p>hello 가 없습니다.</p>
+                {% endif %}
+            </div>
+            <img src="{% static 'images/team_info_stadium/stadium.jpg' %}" alt="내 이미지"
+                 style="width: 1044px; height: 550px;">
+
+        </div>
+    </div>
+    <div class="container-divider"></div>
+    <!-- Call to Action-->
+    <div style="display: flex; align-items: center;">
+        <div id="map" style="width:500px;height:400px;"></div>
+        <div style="margin-left: 20px;">
+            <h2>오시는 길 안내</h2>
+            <button>
+                <a href="https://map.kakao.com/link/map/21755436">길 찾기</a>
+            </button>
+        </div>
+    </div>
+    <script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b97b04466387f5db1adbd96b6f72eaaf"></script>
+    <script>
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+      mapOption = {
+          center: new kakao.maps.LatLng(35.168297, 126.888491), // 지도의 중심좌표
+          level: 4 // 지도의 확대 레벨
+      };
+
+  var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+  var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png', // 마커이미지의 주소입니다
+      imageSize = new kakao.maps.Size(64, 69), // 마커이미지의 크기입니다
+      imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+  // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+  var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+      markerPosition = new kakao.maps.LatLng(35.168247, 126.889); // 마커가 표시될 위치입니다
+
+  // 마커를 생성합니다
+  var marker = new kakao.maps.Marker({
+      position: markerPosition,
+      image: markerImage // 마커이미지 설정
+  });
+
+  // 마커가 지도 위에 표시되도록 설정합니다
+  marker.setMap(map);
+    </script>
+    <!-- Content Row-->
+</div>
+{% endblock %}

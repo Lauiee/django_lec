@@ -29,22 +29,32 @@
         font-size: 70px; /* 텍스트 크기 설정 */
         font-weight: bold; /* 텍스트 두껍게 설정 */
     }
-
 </style>
 <div class="container px-4 px-lg-5">
     <!-- Heading Row--><!-- Team Logo -->
     <div class="image-container">
         <!-- <img src="{% static 'images/team_info_hello/helloHeaderTiger.png' %}" alt="..." class="overlap-image" style="width: 300px; height: 200px; margin-left: 54px; margin-bottom: 10px; margin-top: 10px;">-->
-        <div class="text-over-image">신규 영입 선수</div>
+        <div class="text-over-image">타자</div>
         <img src="{% static 'images/team_info_hello/helloKIA.png' %}" alt="내 이미지" style="width: 1044px; height: 220px;">
     </div>
-    <!-- Heading Row--><!-- Team info -->
+     <!-- Heading Row--><!-- Team info -->
     <div class="container-divider"></div>
+    <!-- 검색어 입력 폼 추가 -->
+    <div class="row gx-4 gx-lg-5 align-items-center my-5">
+        <div class="col-lg-3">
+            <form id="search-form">
+                <div>
+                    <button type="button" onclick="searchPlayers()">검색</button><input type="text" id="search-input" placeholder="선수 이름 입력">
+                </div>
+            </form>
+        </div>
+            <div class="container-divider"></div>
+    </div>
 
     <div class="row gx-4 gx-lg-5 align-items-center my-5">
         {% if player_instance %}
         {% for player in player_instance|dictsort:"playerBackNum" %}
-        {% if player.is_New %}
+        {% if player.playerPos in 'LF,RF,CF,1B,2B,3B,SS,C' %}
         <div class="col-lg-3"> <!-- 선호하는 크기에 따라 열 너비를 조정하세요 -->
             <div class="player-info" style="display: inline-block; margin-bottom: 20px; text-align: center;">
                 <h1 class="font-weight-bold" style="font-size: 30px;">
@@ -73,7 +83,32 @@
 
 
     <div class="container-divider"></div>
+ <script>
+        function searchPlayers() {
+            var searchTerm = document.getElementById("search-input").value.toLowerCase();
 
+            var players = document.querySelectorAll('.player-info');
+            var noResultsMessage = document.getElementById("no-results");
+
+            var foundPlayers = false;
+
+            players.forEach(function(player) {
+                var playerName = player.innerText.toLowerCase();
+                if (playerName.includes(searchTerm)) {
+                    player.style.display = "inline-block";
+                    foundPlayers = true;
+                } else {
+                    player.style.display = "none";
+                }
+            });
+
+            if (foundPlayers) {
+                noResultsMessage.style.display = "none";
+            } else {
+                noResultsMessage.style.display = "block";
+            }
+        }
+    </script>
     <!-- Call to Action-->
 
     <!-- Content Row-->
