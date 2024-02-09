@@ -49,17 +49,48 @@
             <div class="player-info" style="display: inline-block; margin-bottom: 20px; text-align: center;">
                 <h1 class="font-weight-bold" style="font-size: 30px;">
                     {% if player.PlayerImg %}
-                    <a href="{% url 'detail' player_id=player.id %}">
+                    {% if player.playerPos in 'SP,RP,CP' %}
+                    {% if " " in player.playerName %}
+                    <a href="{% url 'detail_pit' playerName=player.playerName.split|last %}">
+                        {% else %}
+                    <a href="{% url 'detail_pit' playerName=player.playerName %}">
+                    {% endif %}
+                        <img src="{{ player.PlayerImg.url }}" alt="{{ player.playerName }} 이미지" style="width: 228px; height: 221px;">
+                    </a>
+                    {% else %}
+                    {% if " " in player.playerName %}
+                    <a href="{% url 'detail_bat' playerName=player.playerName.split|last %}">
+                        {% else %}
+                    <a href="{% url 'detail_bat' playerName=player.playerName %}">
+                    {% endif %}
                         <img src="{{ player.PlayerImg.url }}" alt="{{ player.playerName }} 이미지" style="width: 228px; height: 221px;">
                     </a>
                     {% endif %}
+                    {% endif %}
                 </h1>
+                {% if player.playerPos in 'SP,RP,CP' %}
                 <p style="font-size: 13.3px;">
-                    <a href="{% url 'detail' player_id=player.id %}">
+                    {% if " " in player.playerName %}
+                    <a href="{% url 'detail_pit' playerName=player.playerName.split|last %}">
+                        {% else %}
+                    <a href="{% url 'detail_pit' playerName=player.playerName %}">
+                    {% endif %}
                         No.{{ player.playerBackNum }} {{ player.playerName }}
                         <br>{{ player.playerPos|linebreaksbr }}
                     </a>
                 </p>
+                {% else %}
+                <p style="font-size: 13.3px;">
+                    {% if " " in player.playerName %}
+                    <a href="{% url 'detail_bat' playerName=player.playerName.split|last %}">
+                        {% else %}
+                    <a href="{% url 'detail_bat' playerName=player.playerName %}">
+                    {% endif %}
+                        No.{{ player.playerBackNum }} {{ player.playerName }}
+                        <br>{{ player.playerPos|linebreaksbr }}
+                    </a>
+                </p>
+                {% endif %}
             </div>
         </div>
         {% endif %}
