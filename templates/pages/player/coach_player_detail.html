@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Detail</title>
+</head>
+<body>
+    <h1>코치 세부 저보</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>이름</th>
+                <th>나이</th>
+                <th>포지션</th>
+            </tr>
+        </thead>
+        <tbody style="text-align: center;">
+            {% for data_row in player_data %}
+            <tr>
+                <td>{{ data_row.1|default:"-" }}</td>
+                <td>{{ data_row.2|default:"-" }}</td>
+                <td>{{ data_row.3|default:"-" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
