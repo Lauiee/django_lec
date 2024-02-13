@@ -13,4 +13,5 @@ urlpatterns = [
  path('player/pitcher/<str:playerName>/', views.pitcher_player_detail, name='detail_pit'),
  path('player/coach/<str:playerName>/', views.coach_player_detail, name='detail_coa'),
  path('team/stadium', views.stadium),
+ path('schedule_result', views.schedule),
 ]

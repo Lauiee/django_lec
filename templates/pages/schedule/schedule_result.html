@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h2>경기 일정 및 결과</h2>
+            <label>선택 달</label>
+            <select>
+                <option>1월</option>
+                <option>2월</option>
+                <option>3월</option>
+                <option>4월</option>
+                <option>5월</option>
+                <option>6월</option>
+                <option>7월</option>
+                <option>8월</option>
+                <option>9월</option>
+                <option>10월</option>
+                <option>11월</option>
+                <option>12월</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                {% for schedule in schedules %}
+                <div class="col-3">
+                    <div class="card">
+                        <div class="card-header">{{ schedule.0 }}</div>
+                        <div class="card-body">
+                            <p class="card-text">Time: {{ schedule.1 }}</p>
+                            <p class="card-text">Play: {{ schedule.2 }}</p>
+                            <p class="card-text">Park: {{ schedule.3 }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+{% endblock %}

@@ -7,6 +7,34 @@ from pages.models import TeamInfo, Hello, Player, Stadium, Player_detail
 def mainpage(request):
     return render(request, 'pages/mainpage.html')
 
+def schedule(request):
+    try:
+        # MySQL 연결
+        conn = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="3042",
+            database="schedule"
+        )
+
+        # 데이터베이스 커서 생성
+        cursor = conn.cursor()
+
+        # 쿼리 실행
+        cursor.execute("SELECT day, time, play, park FROM match2024_schedule")
+
+        # 결과 가져오기
+        schedules = cursor.fetchall()
+
+        # 연결 종료
+        cursor.close()
+        conn.close()
+    except Exception as e:
+        # 오류가 발생했을 때 처리할 코드
+        # 예를 들어 로깅하거나 사용자에게 오류 메시지를 보여줄 수 있습니다.
+        schedules = None
+
+    return render(request, 'pages/schedule/schedule_result.html', {'schedules': schedules})
 
 def team(request):
     team_history = TeamInfo.objects.order_by('pub_date')  # -뺐으니 오래된게 제일 먼저나옴

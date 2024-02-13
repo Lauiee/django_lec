@@ -60,7 +60,7 @@
                 <h1 class="font-weight-bold" style="font-size: 30px;">
                     {% if player.PlayerImg %}
                     {% if " " in player.playerName %}
-                    <a href="{% url 'detail_bat' playerName=player.playerName.split|first %}">
+                    <a href="{% url 'detail_bat' playerName=player.playerName.split|first %}"></a>
                         {% else %}
                     <a href="{% url 'detail_bat' playerName=player.playerName %}">
                     {% endif %}
@@ -70,7 +70,7 @@
                 </h1>
                 <p style="font-size: 13.3px;">
                     {% if " " in player.playerName %}
-                    <a href="{% url 'detail_bat' playerName=player.playerName.split|first %}">
+                    <a href="{% url 'detail_bat' playerName=player.playerName.split|first %}"></a>
                         {% else %}
                     <a href="{% url 'detail_bat' playerName=player.playerName %}">
                     {% endif %}
@@ -92,7 +92,8 @@
 
     <div class="container-divider"></div>
  <script>
-        function searchPlayers() {
+        function searchPlayers(event) {
+
             var searchTerm = document.getElementById("search-input").value.toLowerCase();
 
             var players = document.querySelectorAll('.player-info');
@@ -116,6 +117,7 @@
                 noResultsMessage.style.display = "block";
             }
         }
+
     </script>
     <!-- Call to Action-->
 
