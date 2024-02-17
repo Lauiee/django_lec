@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Player Detail</title>
-</head>
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
 <body>
 <h1>투수 세부 정보</h1>
 <table border="1">
@@ -84,5 +80,38 @@
     {% endfor %}
     </tbody>
 </table>
+
+<section class="mb-5">
+    <div class="card bg-light">
+        <div class="card-body">
+            <form method="post" class="mb-4" action="{% url 'pit_comment_create' player_instance.id %}">
+                {% csrf_token %}
+                <textarea id="content" name="content" class="form-control" rows="3"
+                          placeholder="내용을 입력해주세요."></textarea>
+                <button type="submit" class="btn btn-primary">submit</button>
+            </form>
+            {% for comment in player_instance.comment_set.all %}
+            <div class="d-flex">
+                <div class="ms-3">
+                    <div class="fw-bold">{{ comment.author.username }} &nbsp&nbsp {{ comment.create_date }}
+                        {% if comment.create_date != comment.modify_date %}
+                        / 수정일자: {{ comment.modify_date }}
+                        {% endif %}
+                        {% if request.user == comment.author %}
+                        <a href="{% url 'comment_update' comment_id=comment.id player_id=player_instance.id flag=1%}" class="btn btn-sm btn-outline-secondary">수정</a>
+                        <a href="{% url 'comment_delete' comment_id=comment.id player_id=player_instance.id flag=1 %}" class="btn btn-sm btn-outline-secondary">삭제</a>
+                        {% endif %}
+
+                    </div>
+                    {{ comment.content }}
+                </div>
+            </div>
+            <br/>
+            {% endfor %}
+
+        </div>
+    </div>
+</section>
 </body>
-</html>
+
+{% endblock %}

@@ -1,7 +1,10 @@
 import mysql.connector
-from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import render, get_object_or_404, redirect
 
-from pages.models import TeamInfo, Hello, Player, Stadium, Player_detail
+from pages.forms import CommentForm
+from pages.models import TeamInfo, Hello, Player, Stadium, Comment
 
 
 def mainpage(request):
@@ -99,8 +102,10 @@ def batter_player_detail(request, playerName):
 
         conn.commit()
 
+        player_instance = get_object_or_404(Player, playerName=playerName)
+
         # 데이터를 템플릿에 전달
-        return render(request, 'pages/player/batter_player_detail.html', {'player_data': player_data})
+        return render(request, 'pages/player/batter_player_detail.html', {'player_data': player_data, 'player_instance': player_instance})
     except Exception as e:
         # 오류 발생 시 예외 처리
         print(f"Error fetching player data: {e}")
@@ -132,8 +137,10 @@ def pitcher_player_detail(request, playerName):
 
         conn.commit()
 
+        player_instance = get_object_or_404(Player, playerName=playerName)
+
         # 데이터를 템플릿에 전달
-        return render(request, 'pages/player/pitcher_player_detail.html', {'player_data': player_data})
+        return render(request, 'pages/player/pitcher_player_detail.html', {'player_data': player_data, 'player_instance': player_instance})
     except Exception as e:
         # 오류 발생 시 예외 처리
         print(f"Error fetching player data: {e}")
@@ -165,8 +172,10 @@ def coach_player_detail(request, playerName):
 
         conn.commit()
 
+        player_instance = get_object_or_404(Player, playerName=playerName)
+
         # 데이터를 템플릿에 전달
-        return render(request, 'pages/player/coach_player_detail.html', {'player_data': player_data})
+        return render(request, 'pages/player/coach_player_detail.html', {'player_data': player_data, 'player_instance': player_instance})
     except Exception as e:
         # 오류 발생 시 예외 처리
         print(f"Error fetching player data: {e}")
@@ -175,3 +184,102 @@ def coach_player_detail(request, playerName):
         # 연결 종료
         if conn:
             conn.close()
+
+@login_required(login_url='accounts:login')
+def pit_comment_create(request, player_id):
+
+ player_instance = get_object_or_404(Player, pk=player_id)
+
+ if request.method == 'POST':
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.content_list = player_instance
+        comment.author = request.user
+        comment.save()
+        return redirect('detail_pit', playerName=player_instance.playerName)
+ else:
+    form = CommentForm()
+ context = {'content_list': player_instance, 'form': form}
+ return (render(request, 'pages/player/pitcher_player_detail.html', context))
+
+@login_required(login_url='accounts:login')
+def bat_comment_create(request, player_id):
+
+ player_instance = get_object_or_404(Player, pk=player_id)
+
+ if request.method == 'POST':
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.content_list = player_instance
+        comment.author = request.user
+        comment.save()
+        return redirect('detail_bat', playerName=player_instance.playerName)
+ else:
+    form = CommentForm()
+ context = {'content_list': player_instance, 'form': form}
+ return (render(request, 'pages/player/batter_player_detail.html', context))
+
+
+@login_required(login_url='accounts:login')
+def coa_comment_create(request, player_id):
+
+ player_instance = get_object_or_404(Player, pk=player_id)
+
+ if request.method == 'POST':
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.content_list = player_instance
+        comment.author = request.user
+        comment.save()
+        return redirect('detail_coa', playerName=player_instance.playerName)
+ else:
+    form = CommentForm()
+ context = {'content_list': player_instance, 'form': form}
+ return render(request, 'pages/player/coach_player_detail.html', context)
+
+@login_required(login_url='accounts:login')
+def comment_update(request, comment_id, player_id, flag):
+ comment = get_object_or_404(Comment, pk=comment_id)
+ player_instance = get_object_or_404(Player, pk=player_id)
+
+ if request.user != comment.author:
+     raise PermissionDenied
+ if request.method == 'POST':
+    form = CommentForm(request.POST, instance=comment)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.save()
+        if flag == 1:
+            return redirect('detail_pit', playerName=player_instance.playerName)
+        elif flag == 2:
+            return redirect('detail_bat', playerName=player_instance.playerName)
+        else :
+            return redirect('detail_coa', playerName=player_instance.playerName)
+
+ else:
+      form = CommentForm(instance=comment)
+
+ context = {'comment': comment, 'form': form, 'player_id': player_id, 'flag': flag}
+ return render(request, 'pages/comment_form.html', context)
+
+@login_required(login_url='accounts:login')
+def comment_delete(request, comment_id, player_id, flag):
+ comment = get_object_or_404(Comment, pk=comment_id)
+ player_instance = get_object_or_404(Player, pk=player_id)
+
+ if request.user != comment.author:
+    raise PermissionDenied
+ else:
+    comment.delete()
+
+    if flag==1:
+        return redirect('detail_pit', playerName=player_instance.playerName)
+    elif flag==2:
+        return redirect('detail_bat', playerName=player_instance.playerName)
+    elif flag==0:
+        return redirect('detail_coa', playerName=player_instance.playerName)
+    else :
+        return redirect('/')
